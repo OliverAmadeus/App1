@@ -12,7 +12,7 @@ from tensorflow.keras.models import load_model
 # Configuración del broker MQTT
 mqtt_broker = "test.mosquitto.org"
 mqtt_port = 1883
-mqtt_topic = "esp32/test"
+mqtt_topic = "esp32/test11"
 
 
 contador1 = 0
@@ -60,8 +60,8 @@ def on_message(client, userdata, msg):
 
             cadena_texto = msg.payload.decode()  # Convertir la cadena de bytes a una cadena de texto
             cadena_limpia = cadena_texto.strip("b'")  # Eliminar el prefijo b' de la cadena
-            valores = cadena_limpia.split("\n")  # Dividir la cadena en una lista de cadenas utilizando la coma como delimitador
-            valores = [int(item.split(": ")[1]) for item in valores if "Promedio" not in item]
+            valores = cadena_limpia.split(",")  # Dividir la cadena en una lista de cadenas utilizando la coma como delimitador
+            valores = [int(valor) for valor in valores if valor.strip()]
             print(valores)
             enteros = [int(valor) for valor in valores]  # Convertir cada cadena en la lista a un entero
             print(enteros)

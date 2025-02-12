@@ -83,7 +83,7 @@ void ActualizarPaso2() {
 
 void irradiancia(String &response) {
     int values[16];
-    int arreglo[16] = { /* valores de los pines */ };
+    int arreglo[16] = {1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13, 14, 15, 16, 17, 18};
     float promedio = 0;
 
     // Leer los valores analógicos
@@ -100,9 +100,10 @@ void irradiancia(String &response) {
     // Construir la respuesta
     response = "";
     for (int i = 0; i < 16; i++) {
-        response += "Valor " + String(i + 1) + ": " + String(values[i]) + "\n";
+       // response += "Valor " + String(i + 1) + ": " + String(values[i]) + "\n";
+        response += String(values[i]) + ",";
     }
-    response += "Promedio: " + String(promedio);
+    
 }
 
 void irradianciaPost() {
@@ -162,7 +163,7 @@ while(cont <= 6000){
   // Publicar un mensaje en un topic
   String response;
   irradiancia(response);
-  client.publish("esp32/test", response.c_str()); 
+  client.publish("esp32/test11", response.c_str()); 
 
   delay(5000); // Publicar cada 5 segundos
 }
