@@ -19,11 +19,18 @@ ESP8266WiFiMulti wifiMulti;
 ESP8266WebServer server(80);
 
 #endif
+
+#include <HTTPClient.h>
+#include <PubSubClient.h>
 #include "data.h"
 #include <Wire.h>
 
-const uint32_t TiempoEsperaWifi = 5000;
 
+WiFiClient espClient;
+PubSubClient client(espClient);
+const uint32_t TiempoEsperaWifi = 5000;
+const char* mqtt_user = ""; // Usuario, si es necesario
+const char* mqtt_pass = ""; // Contraseña, si es necesario
 
 const int bitPins[] = {25, 26, 27, 4, 16, 17, 5, 18}; // Define los pines digitales de salida
 //const int bitPins[] = {38, 38, 38, 38, 38, 38, 38, 38}; // Define los pines digitales de salida
@@ -55,6 +62,7 @@ double corrente_valor=0;
 int pino_sensorv = 32;
 int valor_voltaje = 0;
 int voltaje = 0;
+int cont = 0;
 ////////////////////////7
 void handleSetPWM() {
   if (server.hasArg("pwmValue")) {
@@ -74,6 +82,16 @@ void mensajePwm() {
 }
 
 
+void mensajeBaseMQTT(String &response1) {
+  int value1 = sen;
+  int value2 = menor_valor;
+  int value3 = valor_voltaje;
+  int value4 = val;
+  float value5 = corrente_pico;
+  float value6 = I;
+  response1 = String(value1) + "," + String(value2)+ "," +String(value3) + "," + String(value4) + String(value5)+ "," + String(value6); 
+}
+
 void mensajeBase() {
  // server.send(200, "text/plain", "Hola desde el ESP");
   
@@ -88,8 +106,6 @@ void mensajeBase() {
  
   String response = String(value1) + "," + String(value2)+ "," +String(value3) + "," + String(value4) + String(value5)+ "," + String(value6); 
   server.send(200,"text/plain",response);
-
-
 }
 
 
@@ -164,6 +180,7 @@ void setup() {
     Serial.println("Eror en Wifi");
   }
 
+  client.setServer(mqtt_server, 1883);
   pinMode(pwmPin, OUTPUT);
   int frecuencia = 10000; // 10 kHz
   int resolucion = 8;     // Resolución de 8 bits (0-255)
@@ -211,11 +228,16 @@ menor_valor = 4095;
 }
 
 void loop() {
-  server.handleClient();
 
+while(cont <= 60000){
+  cont = cont+1;
+  server.handleClient();
 #if defined(ESP8266)
   MDNS.update();
 #endif
+  delay(2);
+}
+
 sen = analogRead(sen1);
 
 //if (sen < 1015 && val > 0 ){
@@ -299,6 +321,26 @@ I = 0.00;
 
   delay(100);   
   }
+
+  if (!client.connected()) {
+    while (!client.connected()) {
+      if (client.connect("ESP32", mqtt_user, mqtt_pass)) {
+        Serial.println("Reconectado al servidor MQTT");
+      } else {
+        delay(5000);
+      }
+    }
+  }
+
+  client.loop(); // Asegúrate de que las funciones MQTT se ejecuten
+
+  // Publicar un mensaje en un topic
+  String response1;
+  mensajeBaseMQTT(response1);
+  client.publish("esp32/test12", response1.c_str()); 
+
+
+
 }
 
 
