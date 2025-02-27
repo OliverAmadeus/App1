@@ -89,7 +89,7 @@ void mensajeBaseMQTT(String &response1) {
   int value4 = val;
   float value5 = corrente_pico;
   float value6 = I;
-  response1 = String(value1) + "," + String(value2)+ "," +String(value3) + "," + String(value4) + String(value5)+ "," + String(value6); 
+  response1 = String(value1) + "," + String(value2)+ "," +String(value3) + "," + String(value4) + "," + String(value5)+ "," + String(value6); 
 }
 
 void mensajeBase() {
@@ -104,7 +104,7 @@ void mensajeBase() {
 
   float value6 = I;
  
-  String response = String(value1) + "," + String(value2)+ "," +String(value3) + "," + String(value4) + String(value5)+ "," + String(value6); 
+  String response = String(value1) + "," + String(value2)+ "," +String(value3) + "," + String(value4) + "," + String(value5)+ "," + String(value6); 
   server.send(200,"text/plain",response);
 }
 
