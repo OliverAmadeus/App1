@@ -7,7 +7,7 @@ import time
 parametros = ["Irradiancia", "Temperatura", "VoltajeIN", "CorrienteIN", "PotenciaIN", "PotenciaIN", "VoltajeOUT", "CorrienteOUT", "PotenciaOUT", "Ciclodetrabajo", "Hora"]
 
 # Ruta de la carpeta que contiene los archivos txt
-carpeta_valores = "valores"
+carpeta_valores = "VALORES"
 
 # Crear la carpeta BaseDeDatos si no existe
 carpeta_base_datos = "BaseDeDatos"

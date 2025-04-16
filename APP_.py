@@ -10,9 +10,9 @@ from tensorflow.keras.models import load_model
 
 
 # Configuración del broker MQTT
-mqtt_broker = "test.mosquitto.org"
-mqtt_port = 1883
-mqtt_topic = "esp32/test11"
+mqtt_broker = "test.mosquitto.org" #broker
+mqtt_port = 1883 #puerto
+mqtt_topic = "esp32/test11" #topic
 
 
 contador1 = 0
