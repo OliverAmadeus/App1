@@ -209,7 +209,7 @@ Serial.println("Fazendo o Auto ZERO do Sensor...");
  */
 menor_valor = 4095;
  
-  for(int i = 0; i < 10000 ; i++){
+  for(int i = 0; i < 60000 ; i++){
   valor_lido = analogRead(pino_sensor);
   if(valor_lido < menor_valor){
   menor_valor = valor_lido;    
@@ -237,6 +237,12 @@ while(cont <= 60000){
 #endif
   delay(2);
 }
+
+server.handleClient();
+#if defined(ESP8266)
+  MDNS.update();
+#endif
+  delay(2);
 
 sen = analogRead(sen1);
 
@@ -337,7 +343,7 @@ I = 0.00;
   // Publicar un mensaje en un topic
   String response1;
   mensajeBaseMQTT(response1);
-  client.publish("esp32/test12", response1.c_str()); 
+  client.publish("esp32/test12", response1.c_str(), true); 
 
 
 

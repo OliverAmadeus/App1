@@ -139,7 +139,7 @@ void setup() {
 
 void loop() {
 
-while(cont <= 6000){
+while(cont <= 60000){
   cont = cont+1;
   server.handleClient();
 #if defined(ESP8266)
@@ -147,6 +147,12 @@ while(cont <= 6000){
 #endif
   delay(2);
 }
+
+  server.handleClient();
+#if defined(ESP8266)
+  MDNS.update();
+#endif
+  delay(2);
 
   if (!client.connected()) {
     while (!client.connected()) {
@@ -163,7 +169,7 @@ while(cont <= 6000){
   // Publicar un mensaje en un topic
   String response;
   irradiancia(response);
-  client.publish("esp32/test11", response.c_str()); 
+  client.publish("esp32/test11", response.c_str(), true); 
 
   delay(5000); // Publicar cada 5 segundos
 }
